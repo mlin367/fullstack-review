@@ -9,16 +9,24 @@ db.once('open', function() {
 
 let repoSchema = mongoose.Schema({
   username: String,
-  repos: Array
+  repo_name: String,
+  id: Number
 });
 
 let Repo = mongoose.model('Repo', repoSchema);
 
-let save = (collection, fields) => {
+let save = (fields) => {
   // TODO: Your code here
   // This function should save a repo or repos to
   // the MongoDB
-  collection.insertOne(fields)
+  Repo.find({ id: fields.id })
+    .then((result) => {
+      if (result.length > 0) {
+        console.error('Repo already in database!');
+      } else {
+        new Repo(fields);
+      }
+    })
 }
 
 module.exports.save = save;
