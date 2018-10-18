@@ -1,3 +1,4 @@
+const Promise = require('bluebird');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/fetcher');
 
@@ -17,18 +18,20 @@ let repoSchema = mongoose.Schema({
 
 let Repo = mongoose.model('Repo', repoSchema);
 
-let save = (fields) => {
-  // TODO: Your code here
-  // This function should save a repo or repos to
-  // the MongoDB
-  Repo.find({ id: fields.id })
-    .then((result) => {
-      if (result.length > 0) {
-        console.error('Repo already in database!');
-      } else {
-        new Repo(fields).save();
-      }
+let save = (repos) => {
+  return new Promise((resolve, reject) => {
+    repos.forEach(repo => {
+      Repo.find({ id: repo.id })
+      .then((result) => {
+        if (result.length > 0) {
+          console.error('Repo already in database!');
+        } else {
+          new Repo(repo).save();
+        }
+      })
     })
+    resolve('success');
+  })
 }
 
 module.exports.save = save;

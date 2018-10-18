@@ -9,6 +9,8 @@ app.use(express.static(__dirname + '/../client/dist'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
+
 app.post('/repos', function (req, res) {
   // TODO - your code here!
   // This route should take the github username provided
@@ -18,12 +20,12 @@ app.post('/repos', function (req, res) {
     if (err) {
       console.log('ERROR');
     } else {
-      repos.forEach(repo => {
-        db.save(repo);
+      db.save(repos)
+      .then(message => {
+        res.send(message);
       })
-      res.status(201).send('posted');
     }
-  });
+  })
 });
 
 app.get('/repos', function (req, res) {
@@ -34,7 +36,7 @@ app.get('/repos', function (req, res) {
     .limit(25)
     .exec((err, repos) => {
       if (err) console.error(err);
-      res.send(repos);
+      res.json(repos);
     })
 });
 

@@ -20,27 +20,19 @@ class App extends React.Component {
 
   search (term) {
     let query = {username: term};
-    let context = this;
     $.ajax({
       url: '/repos',
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json',
-      success: (data) => {
-        console.log('success')
-        this.fetchRepos();
-      },
-      error: (xhr, status, error) => {
-        console.error(xhr.responseText);
-      }
     })
-    // .done((data) => {
-    //   console.log(`${term} was searched`);
-    //   this.fetch();
-    // })
-    // .fail((jqXHR, error) => {
-    //   console.log(jqXHR.responseText);
-    // });
+    .done((data) => {
+      console.log('success')
+      this.fetchRepos();
+    })
+    .fail((xhr, status, error) => {
+      console.error('ERROR ', xhr.responseText);
+    })
   }
 
   fetchRepos () {
@@ -49,11 +41,6 @@ class App extends React.Component {
       method: 'GET',
       data: '',
       contentType: 'application/json',
-    //   success: (data) => {
-    //     this.setState({
-    //       repos: data
-    //     })
-    //   }
     })
     .done((data) => {
       console.log(data)

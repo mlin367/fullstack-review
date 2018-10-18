@@ -17,11 +17,17 @@ let getReposByUsername = (username, callback) => {
   };
 
   request(options, (err, res, body) => {
-    if (err) {
-      console.log('error: ', err)
+    if (!Array.isArray(JSON.parse(body))) {
+      console.log('error: ', 'user does not exist')
     } else {
       repos = JSON.parse(body).map(repo => {
-        return {username: repo.owner.login, repo_name: repo.name, id: repo.id, size: repo.size, url: repo.html_url};
+        return {
+          username: repo.owner.login, 
+          repo_name: repo.name, 
+          id: repo.id, 
+          size: repo.size, 
+          url: repo.html_url
+        };
       })
       callback(null, repos);
     }
