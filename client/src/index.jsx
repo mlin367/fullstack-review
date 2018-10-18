@@ -10,50 +10,67 @@ class App extends React.Component {
     this.state = { 
       repos: []
     }
+    this.search = this.search.bind(this);
+    this.fetchRepos = this.fetchRepos.bind(this);
   }
 
   componentDidMount() {
-    this.fetch();
+    this.fetchRepos();
   }
 
   search (term) {
     let query = {username: term};
-
+    let context = this;
     $.ajax({
       url: '/repos',
       method: 'POST',
-      data: query,
+      data: JSON.stringify(query),
+      contentType: 'application/json',
       success: (data) => {
-        console.log(data)
-        console.log(`${term} was searched`);
+        console.log('success')
+        this.fetchRepos();
       },
-      error: (jqXHR, error) => {
-        console.log(jqXHR.responseText);
+      error: (xhr, status, error) => {
+        console.error(xhr.responseText);
       }
     })
+    // .done((data) => {
+    //   console.log(`${term} was searched`);
+    //   this.fetch();
+    // })
+    // .fail((jqXHR, error) => {
+    //   console.log(jqXHR.responseText);
+    // });
   }
 
-  fetch () {
+  fetchRepos () {
     $.ajax({
       url: '/repos',
       method: 'GET',
       data: '',
-      success: (data) => {
-        this.setState({
-          repos: data
-        })
-      },
-      error: (xhr, status, error) => {
-        console.error(xhr.responseText)
-      }
+      contentType: 'application/json',
+    //   success: (data) => {
+    //     this.setState({
+    //       repos: data
+    //     })
+    //   }
     })
+    .done((data) => {
+      console.log(data)
+      this.setState({
+        repos: data
+      })
+    })
+    .fail((xhr, status, error) => {
+      console.error(xhr.responseText)
+    });
   }
 
   render () {
     return (<div>
       <h1>Github Fetcher</h1>
       <RepoList repos={this.state.repos}/>
-      <Search onSearch={this.search.bind(this)}/>
+      <Search onSearch={this.search}/>
     </div>)
   }
 }

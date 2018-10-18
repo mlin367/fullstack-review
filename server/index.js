@@ -21,6 +21,7 @@ app.post('/repos', function (req, res) {
       repos.forEach(repo => {
         db.save(repo);
       })
+      res.status(201).send('posted');
     }
   });
 });
@@ -33,7 +34,7 @@ app.get('/repos', function (req, res) {
     .limit(25)
     .exec((err, repos) => {
       if (err) console.error(err);
-      res.json(repos);
+      res.send(repos);
     })
 });
 

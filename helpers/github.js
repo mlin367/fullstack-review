@@ -21,7 +21,7 @@ let getReposByUsername = (username, callback) => {
       console.log('error: ', err)
     } else {
       repos = JSON.parse(body).map(repo => {
-        return {username: repo.owner.login, repo_name: repo.name, id: repo.id, size: repo.size};
+        return {username: repo.owner.login, repo_name: repo.name, id: repo.id, size: repo.size, url: repo.html_url};
       })
       callback(null, repos);
     }

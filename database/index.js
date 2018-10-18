@@ -11,7 +11,8 @@ let repoSchema = mongoose.Schema({
   username: String,
   repo_name: String,
   id: Number,
-  size: Number
+  size: Number,
+  url: String
 });
 
 let Repo = mongoose.model('Repo', repoSchema);
