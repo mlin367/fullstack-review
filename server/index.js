@@ -28,6 +28,13 @@ app.post('/repos', function (req, res) {
 app.get('/repos', function (req, res) {
   // TODO - your code here!
   // This route should send back the top 25 repos
+  db.Repo.find({})
+    .sort({size: 'desc'})
+    .limit(25)
+    .exec((err, repos) => {
+      if (err) console.error(err);
+      res.json(repos);
+    })
 });
 
 let port = 1128;

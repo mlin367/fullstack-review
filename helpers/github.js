@@ -9,7 +9,7 @@ let getReposByUsername = (username, callback) => {
   // but you'll have to fill in the URL
   let repos;
   let options = {
-    url: `https://api.github.com/users/${username}/repos`,
+    url: `https://api.github.com/users/${username}/repos?per_page=100`,
     headers: {
       'User-Agent': 'request',
       'Authorization': `token ${config.TOKEN}`
@@ -21,7 +21,7 @@ let getReposByUsername = (username, callback) => {
       console.log('error: ', err)
     } else {
       repos = JSON.parse(body).map(repo => {
-        return {username: repo.owner.login, repo_name: repo.name, id: repo.id};
+        return {username: repo.owner.login, repo_name: repo.name, id: repo.id, size: repo.size};
       })
       callback(null, repos);
     }

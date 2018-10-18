@@ -10,7 +10,8 @@ db.once('open', function() {
 let repoSchema = mongoose.Schema({
   username: String,
   repo_name: String,
-  id: Number
+  id: Number,
+  size: Number
 });
 
 let Repo = mongoose.model('Repo', repoSchema);
@@ -24,9 +25,10 @@ let save = (fields) => {
       if (result.length > 0) {
         console.error('Repo already in database!');
       } else {
-        new Repo(fields);
+        new Repo(fields).save();
       }
     })
 }
 
 module.exports.save = save;
+module.exports.Repo = Repo;
